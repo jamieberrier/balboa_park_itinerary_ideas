@@ -1,4 +1,4 @@
-require "balboa_park_itinerary_ideas/version"
+require_relative '../config/environment'
 
 module BalboaParkItineraryIdeas
   class Error < StandardError; end

@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+# The CLI
+
+require './lib/balboa_park_itinerary_ideas'
+
+# Encapsulated CLI logic
+#BalboaParkEvents::CLI.new.call
