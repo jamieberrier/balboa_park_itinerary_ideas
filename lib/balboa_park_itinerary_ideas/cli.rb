@@ -22,15 +22,8 @@ class BalboaParkItineraryIdeas::CLI
   def list
     puts ""
     puts "Itinerary Ideas:"
-    puts "1. Birds of Balboa Park"
-    puts "2. Kids"
-    puts "3. Nature Lover"
-    puts "4. 60-90 Minute Tour"
-    puts "5. Explorer"
-    puts "6. Only in Balboa Park"
-    puts "7. The Shopper"
-    puts "8. Architecture"
-    puts "9. Eccentric"
+    puts ""
+    BalboaParkItineraryIdeas::Scraper.print_list
   end
 
   def menu
