@@ -4,4 +4,4 @@
 require './lib/balboa_park_itinerary_ideas'
 
 # Encapsulated CLI logic
-#BalboaParkEvents::CLI.new.call
+BalboaParkItineraryIdeas::CLI.new.call
