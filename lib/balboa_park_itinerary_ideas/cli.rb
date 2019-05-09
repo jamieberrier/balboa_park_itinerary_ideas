@@ -2,11 +2,18 @@
 class BalboaParkItineraryIdeas::CLI
 
   def call
+    make_itineraries
     welcome_message
     list
     menu
   end
 
+  def make_itineraries
+    itineraries_array = BalboaParkItineraryIdeas::Scraper.scrape_itineraries
+    BalboaParkItineraryIdeas::Itinerary.create_from_collection(itineraries_array)
+  end
+
+  # scrape from balboapark.org
   def welcome_message
     puts "------------------------------------------------------------------------------"
     puts "Welcome to Balboa Park"
@@ -23,7 +30,9 @@ class BalboaParkItineraryIdeas::CLI
     puts ""
     puts "Itinerary Ideas:"
     puts ""
-    BalboaParkItineraryIdeas::Scraper.print_list
+    BalboaParkItineraryIdeas::Itinerary.all.each.with_index(1) do |itinerary, i|
+      puts "#{i}. #{itinerary.name}"
+    end
   end
 
   def menu
@@ -40,7 +49,8 @@ class BalboaParkItineraryIdeas::CLI
       input = gets.strip.downcase
 
       if input.to_i > 0 && input.to_i <= 9
-        puts "Here are the details of itinerary ##{input}."
+        itinerary = BalboaParkItineraryIdeas::Itinerary.find(input.to_i)
+        details(itinerary)
       elsif input == "list"
         list
       elsif input == "exit"
@@ -48,9 +58,21 @@ class BalboaParkItineraryIdeas::CLI
       else
         puts "Didn't understand, please try again."
       end
-
-
     end
+  end
+
+  def details(itinerary)
+    puts ""
+    puts "#{itinerary.header}"
+    puts ""
+    # refactor....fix formatting
+    #puts <<-DOC.gsub /^\s*/, ''
+    #  #{itinerary.summary}
+    #DOC
+    puts "#{itinerary.summary}"
+    puts ""
+    # fix url...add balboapark.org
+    puts "link: balboapark.org#{itinerary.url}"
   end
 
   def goodbye
