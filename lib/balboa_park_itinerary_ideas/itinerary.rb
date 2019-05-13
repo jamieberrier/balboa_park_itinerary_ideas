@@ -1,5 +1,5 @@
 class BalboaParkItineraryIdeas::Itinerary
-  attr_accessor :name, :url, :header, :summary # add attributes from itinerary's page
+  attr_accessor :name, :url, :header, :summary, :info # add attributes from itinerary's page
 
   @@all = []
 
@@ -36,5 +36,24 @@ class BalboaParkItineraryIdeas::Itinerary
     @summary ||= doc.css('div.content div.field--type-text-with-summary p').text.strip
   end
 
-  # add more methods for itinerary's attributes from itinerary's page
+  # add URL for each attraction, if exists
+  def info
+    info = []
+
+    doc.css('div.field--name-field-stops div.field--item').each do |attraction|
+        description = attraction.css('p').text
+        name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
+
+        info.push(name: name, description: description)
+    end
+    info.reject! { |e|  e[:name] == nil}
+  end
+
+  def print_info
+    info.each do |x|
+      puts "#{x[:name]}".bold
+      puts "#{x[:description]}"
+      puts ""
+    end
+  end
 end

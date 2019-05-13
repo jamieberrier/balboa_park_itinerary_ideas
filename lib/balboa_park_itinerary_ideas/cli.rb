@@ -72,14 +72,15 @@ class BalboaParkItineraryIdeas::CLI
     #DOC
     puts "#{itinerary.summary}".yellow
     puts ""
+    itinerary.print_info
     # fix url...add balboapark.org
-    puts "link: ".bold + "https://balboapark.org#{itinerary.url}"
+    puts "Click for more info: ".bold + "https://balboapark.org#{itinerary.url}".underline
     puts ""
   end
 
   def goodbye
     puts ""
-    puts "Hope to see you soon!".green.bold
+    puts "Goodbye! Hope to see you soon!".green.bold
     puts ""
   end
 end
