@@ -16,9 +16,10 @@ class BalboaParkItineraryIdeas::CLI
   # scrape from balboapark.org
   def welcome_message
     puts "------------------------------------------------------------------------------"
-    puts "Welcome to Balboa Park"
-    puts ""
-    puts "Ever changing. Always amazing. Where culture, science, and nature collide,"
+    puts "Welcome to Balboa Park".blue.bold
+    #puts ""
+    puts "Ever changing. Always amazing."
+    puts "Where culture, science, and nature collide,"
     puts "Balboa Park is home to more than 16 museums, multiple performing arts venues,"
     puts "lovely gardens, trails, and many other creative and recreational attractions,"
     puts "including the San Diego Zoo. With a variety of cultural institutions among its"
@@ -28,10 +29,10 @@ class BalboaParkItineraryIdeas::CLI
 
   def list
     puts ""
-    puts "Itinerary Ideas:"
-    puts ""
+    puts "Itinerary Ideas:".blue.bold
+    #puts ""
     BalboaParkItineraryIdeas::Itinerary.all.each.with_index(1) do |itinerary, i|
-      puts "#{i}. #{itinerary.name}"
+      puts "#{i}.".green.bold + " #{itinerary.name}".bold
     end
   end
 
@@ -39,11 +40,11 @@ class BalboaParkItineraryIdeas::CLI
     input = nil
     while input != "exit"
       puts "-------------------------------------------------------------------"
-      puts "What would you like to do? Your choices are:"
-      puts ""
-      puts "Type the itinerary number to see the details ('1', '2', '3'....'9')"
-      puts "Type 'list' to see the list again"
-      puts "Type 'exit'"
+      puts "What would you like to do? Your choices are:".yellow.bold
+      #puts ""
+      puts "Type the itinerary number " + "('1', '2', '3'....'9')".red.bold + " to see the details"
+      puts "Type " + "list".red.bold + " to see the list again"
+      puts "Type " + "exit".red.bold
       puts "-------------------------------------------------------------------"
 
       input = gets.strip.downcase
@@ -63,21 +64,22 @@ class BalboaParkItineraryIdeas::CLI
 
   def details(itinerary)
     puts ""
-    puts "#{itinerary.header}"
+    puts "#{itinerary.header}".blue.bold
     puts ""
     # refactor....fix formatting
     #puts <<-DOC.gsub /^\s*/, ''
     #  #{itinerary.summary}
     #DOC
-    puts "#{itinerary.summary}"
+    puts "#{itinerary.summary}".yellow
     puts ""
     # fix url...add balboapark.org
-    puts "link: balboapark.org#{itinerary.url}"
+    puts "link: ".bold + "https://balboapark.org#{itinerary.url}"
+    puts ""
   end
 
   def goodbye
     puts ""
-    puts "Hope to see you soon!"
+    puts "Hope to see you soon!".green.bold
     puts ""
   end
 end
