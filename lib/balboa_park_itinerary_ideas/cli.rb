@@ -9,11 +9,13 @@ class BalboaParkItineraryIdeas::CLI
     menu
   end
 
+  # makes instances of Itinerary using an array of itineraries scraped from URL
   def make_itineraries
     itineraries_array = BalboaParkItineraryIdeas::Scraper.scrape_itineraries
     BalboaParkItineraryIdeas::Itinerary.create_from_collection(itineraries_array)
   end
 
+  # add individual itinerary attributes scraped from the individual itinerary's page
   def add_attributes_to_itineraries
     BalboaParkItineraryIdeas::Itinerary.all.each do |itinerary|
       attributes = BalboaParkItineraryIdeas::Scraper.scrape_itinerary_page(BalboaParkItineraryIdeas::Scraper::URL + itinerary.itinerary_url)
@@ -21,7 +23,7 @@ class BalboaParkItineraryIdeas::CLI
     end
   end
 
-  # scrape from balboapark.org
+  # display welome message scrape from balboapark.org
   def welcome_message
     puts "------------------------------------------------------------------------------"
     puts "Welcome to Balboa Park".blue.bold
@@ -34,6 +36,8 @@ class BalboaParkItineraryIdeas::CLI
     puts "------------------------------------------------------------------------------"
   end
 
+  # lists the itineraries for the user to choose from
+  # add: scrape "Itinerary Ideas" from page
   def list_itineraries
     puts "Itinerary Ideas:".blue.bold
     BalboaParkItineraryIdeas::Itinerary.all.each.with_index(1) do |itinerary, i|
@@ -41,6 +45,7 @@ class BalboaParkItineraryIdeas::CLI
     end
   end
 
+  # displays the user's choices, gets the user's input, and either displays details of an itinerary, the list of itineraries, or exits
   def menu
     input = nil
     while input != "exit"
@@ -66,6 +71,7 @@ class BalboaParkItineraryIdeas::CLI
     end
   end
 
+  # displays the itinerary's details
   def print_details(itinerary)
     puts ""
     puts "#{itinerary.title}".blue.bold
@@ -77,6 +83,7 @@ class BalboaParkItineraryIdeas::CLI
     puts ""
   end
 
+  # displays exit message to the user
   def goodbye
     puts ""
     puts "Goodbye! Hope to see you soon!".green.bold
