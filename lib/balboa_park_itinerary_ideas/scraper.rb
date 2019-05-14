@@ -5,6 +5,9 @@ class BalboaParkItineraryIdeas::Scraper
     Nokogiri::HTML(open(URL))
   end
 
+  # add methods to get welcome message
+
+  # gets title and url of each itinerary, pushes them into an array, and returns array
   def self.scrape_itineraries
     itineraries = []
 
@@ -14,13 +17,14 @@ class BalboaParkItineraryIdeas::Scraper
     itineraries
   end
 
+  # gets the itinerary's attrubutes (summary and name & description of the attractions) from itinerary's page and returns hash with the attributes
   def self.scrape_itinerary_page(itinerary_url)
     itinerary_page = Nokogiri::HTML(open(itinerary_url))
     scraped_details = {}
 
     scraped_details[:summary] = itinerary_page.css('div.content div.field--type-text-with-summary p').text.strip
-    scraped_details[:attractions] = []
 
+    scraped_details[:attractions] = []
     itinerary_page.css('div.field--name-field-stops div.field--item').each do |attraction|
         description = attraction.css('p').text
         name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
@@ -28,31 +32,7 @@ class BalboaParkItineraryIdeas::Scraper
         scraped_details[:attractions].push(name: name, description: description)
     end
     scraped_details[:attractions].reject! { |e|  e[:name] == nil }
-    
+
     scraped_details
   end
 end
-=begin
-    def self.print_list
-      self.get_page.css('div.view-itineraries span.field-content').each.with_index(1) do |itinerary, i|
-        itinerary_name = itinerary.css('a').text
-        puts " #{i}. #{itinerary_name}"
-      end
-    end
-=end
-=begin
-  # scrape an itinerary's page to get further information about that itinerary.
-  def self.scrape_itinerary_page#(itinerary_url)
-    itinerary_url = "https://www.balboapark.org/itinerary/eccentric"
-    itinerary_page = Nokogiri::HTML(open(itinerary_url))
-    details = []
-
-    details.push(header: itinerary_page.css('h1.page-header').text.strip)
-    details.push(summary: itinerary_page.css('div.content div.field--type-text-with-summary p').text.strip)
-    details.push(url: itinerary_url)
-
-    #itinerary_page.css('div.field--items p').text
-
-    details
-  end
-=end

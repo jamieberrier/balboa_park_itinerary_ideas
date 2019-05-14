@@ -5,7 +5,7 @@ class BalboaParkItineraryIdeas::CLI
     make_itineraries
     add_attributes_to_itineraries
     welcome_message
-    list
+    list_itineraries
     menu
   end
 
@@ -19,7 +19,6 @@ class BalboaParkItineraryIdeas::CLI
       attributes = BalboaParkItineraryIdeas::Scraper.scrape_itinerary_page(BalboaParkItineraryIdeas::Scraper::URL + itinerary.itinerary_url)
       itinerary.add_itinerary_attributes(attributes)
     end
-    binding.pry
   end
 
   # scrape from balboapark.org
@@ -35,8 +34,7 @@ class BalboaParkItineraryIdeas::CLI
     puts "------------------------------------------------------------------------------"
   end
 
-  def list
-    puts ""
+  def list_itineraries
     puts "Itinerary Ideas:".blue.bold
     BalboaParkItineraryIdeas::Itinerary.all.each.with_index(1) do |itinerary, i|
       puts "#{i}.".green.bold + " #{itinerary.title}".bold
@@ -59,7 +57,7 @@ class BalboaParkItineraryIdeas::CLI
         itinerary = BalboaParkItineraryIdeas::Itinerary.find(input.to_i)
         print_details(itinerary)
       elsif input == "list"
-        list
+        list_itineraries
       elsif input == "exit"
         goodbye
       else
@@ -71,11 +69,7 @@ class BalboaParkItineraryIdeas::CLI
   def print_details(itinerary)
     puts ""
     puts "#{itinerary.title}".blue.bold
-    puts ""
     # refactor....fix formatting
-    #puts <<-DOC.gsub /^\s*/, ''
-    #  #{itinerary.summary}
-    #DOC
     puts "#{itinerary.summary}".yellow
     puts ""
     itinerary.print_attractions
