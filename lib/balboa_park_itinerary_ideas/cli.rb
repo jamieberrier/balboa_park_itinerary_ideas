@@ -3,6 +3,7 @@ class BalboaParkItineraryIdeas::CLI
 
   def call
     make_itineraries
+    add_attributes_to_itineraries
     welcome_message
     list
     menu
@@ -13,11 +14,18 @@ class BalboaParkItineraryIdeas::CLI
     BalboaParkItineraryIdeas::Itinerary.create_from_collection(itineraries_array)
   end
 
+  def add_attributes_to_itineraries
+    BalboaParkItineraryIdeas::Itinerary.all.each do |itinerary|
+      attributes = BalboaParkItineraryIdeas::Scraper.scrape_itinerary_page(BalboaParkItineraryIdeas::Scraper::URL + itinerary.itinerary_url)
+      itinerary.add_itinerary_attributes(attributes)
+    end
+    binding.pry
+  end
+
   # scrape from balboapark.org
   def welcome_message
     puts "------------------------------------------------------------------------------"
     puts "Welcome to Balboa Park".blue.bold
-    #puts ""
     puts "Ever changing. Always amazing."
     puts "Where culture, science, and nature collide,"
     puts "Balboa Park is home to more than 16 museums, multiple performing arts venues,"
@@ -30,9 +38,8 @@ class BalboaParkItineraryIdeas::CLI
   def list
     puts ""
     puts "Itinerary Ideas:".blue.bold
-    #puts ""
     BalboaParkItineraryIdeas::Itinerary.all.each.with_index(1) do |itinerary, i|
-      puts "#{i}.".green.bold + " #{itinerary.name}".bold
+      puts "#{i}.".green.bold + " #{itinerary.title}".bold
     end
   end
 
@@ -41,7 +48,6 @@ class BalboaParkItineraryIdeas::CLI
     while input != "exit"
       puts "-------------------------------------------------------------------"
       puts "What would you like to do? Your choices are:".yellow.bold
-      #puts ""
       puts "Type the itinerary number " + "('1', '2', '3'....'9')".red.bold + " to see the details"
       puts "Type " + "list".red.bold + " to see the list again"
       puts "Type " + "exit".red.bold
@@ -51,7 +57,7 @@ class BalboaParkItineraryIdeas::CLI
 
       if input.to_i > 0 && input.to_i <= 9
         itinerary = BalboaParkItineraryIdeas::Itinerary.find(input.to_i)
-        details(itinerary)
+        print_details(itinerary)
       elsif input == "list"
         list
       elsif input == "exit"
@@ -62,9 +68,9 @@ class BalboaParkItineraryIdeas::CLI
     end
   end
 
-  def details(itinerary)
+  def print_details(itinerary)
     puts ""
-    puts "#{itinerary.header}".blue.bold
+    puts "#{itinerary.title}".blue.bold
     puts ""
     # refactor....fix formatting
     #puts <<-DOC.gsub /^\s*/, ''
@@ -72,9 +78,8 @@ class BalboaParkItineraryIdeas::CLI
     #DOC
     puts "#{itinerary.summary}".yellow
     puts ""
-    itinerary.print_info
-    # fix url...add balboapark.org
-    puts "Click for more info: ".bold + "https://balboapark.org#{itinerary.url}".underline
+    itinerary.print_attractions
+    puts "Click for more info: ".bold + "#{BalboaParkItineraryIdeas::Scraper::URL}#{itinerary.itinerary_url}".underline
     puts ""
   end
 

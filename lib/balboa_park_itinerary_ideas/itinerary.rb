@@ -1,5 +1,6 @@
 class BalboaParkItineraryIdeas::Itinerary
-  attr_accessor :name, :url, :header, :summary, :info # add attributes from itinerary's page
+
+  attr_accessor :title, :itinerary_url, :summary, :attractions # an array of hashes with names & descriptions of the attractions
 
   @@all = []
 
@@ -14,6 +15,11 @@ class BalboaParkItineraryIdeas::Itinerary
     end
   end
 
+  def add_itinerary_attributes(itinerary_hash)
+    itinerary_hash.each {|key, value| self.send(("#{key}="), value)}
+    self
+  end
+
   def self.all
     @@all
   end
@@ -22,10 +28,19 @@ class BalboaParkItineraryIdeas::Itinerary
     self.all[id-1]
   end
 
+  def print_attractions
+    self.attractions.each do |x|
+      puts "#{x[:name]}".bold
+      puts "#{x[:description]}"
+      puts ""
+    end
+  end
+end
+=begin
   # Itinerary's page
   def doc
     # refactor...add 'https://www.balboapark.org' to itinerary url
-    @doc ||= Nokogiri::HTML(open('https://www.balboapark.org' + self.url))
+    @doc ||= Nokogiri::HTML(open(BalboaParkItineraryIdeas::Scraper::URL + self.itinerary_url))
   end
 
   def header
@@ -37,23 +52,15 @@ class BalboaParkItineraryIdeas::Itinerary
   end
 
   # add URL for each attraction, if exists
-  def info
-    info = []
+  def get_details
+    @details = []
 
     doc.css('div.field--name-field-stops div.field--item').each do |attraction|
         description = attraction.css('p').text
         name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
 
-        info.push(name: name, description: description)
+        @details.push(name: name, description: description)
     end
-    info.reject! { |e|  e[:name] == nil}
+    @details.reject! { |e|  e[:name] == nil}
   end
-
-  def print_info
-    info.each do |x|
-      puts "#{x[:name]}".bold
-      puts "#{x[:description]}"
-      puts ""
-    end
-  end
-end
+=end
