@@ -32,13 +32,12 @@ class BalboaParkItineraryIdeas::Itinerary
   end
 
   # prints the details of each attraction
-  # add the attraction's url, if it has one
   def print_attractions
     self.attractions.each do |x|
-      puts "#{x[:name]}".bold
+      puts "#{x[:name]}".bold.red
       puts "#{x[:description]}"
       if x[:attraction_url] != ""
-        puts "#{x[:attraction_url]}"
+        puts "Click for more info: ".green + "#{x[:attraction_url]}".green.underline
       end
       puts ""
     end

@@ -36,7 +36,7 @@ class BalboaParkItineraryIdeas::CLI
     puts ""
     puts "#{BalboaParkItineraryIdeas::Scraper.scrape_header}".blue.bold
     BalboaParkItineraryIdeas::Itinerary.all.each.with_index(1) do |itinerary, i|
-      puts "#{i}.".green.bold + " #{itinerary.title}".bold
+      puts "#{i}.".red.bold + " #{itinerary.title}".bold
     end
   end
 
@@ -45,7 +45,7 @@ class BalboaParkItineraryIdeas::CLI
     input = nil
     while input != "exit"
       puts "-------------------------------------------------------------------"
-      puts "What would you like to do? Your choices are:".yellow.bold
+      puts "What would you like to do? Your choices are:".green.bold
       puts "Type the itinerary number " + "('1', '2', '3'....'9')".red.bold + " to see the details"
       puts "Type " + "list".red.bold + " to see the list again"
       puts "Type " + "exit".red.bold
@@ -74,7 +74,8 @@ class BalboaParkItineraryIdeas::CLI
     puts "#{itinerary.summary}".yellow
     puts ""
     itinerary.print_attractions
-    puts "Click for more info: ".bold + "#{BalboaParkItineraryIdeas::Scraper::URL}#{itinerary.itinerary_url}".underline
+    puts "Click for more info about the #{itinerary.title} Itinerary: ".green.bold
+    puts "#{BalboaParkItineraryIdeas::Scraper::URL}#{itinerary.itinerary_url}".green.underline
     puts ""
   end
 
