@@ -6,6 +6,16 @@ class BalboaParkItineraryIdeas::Scraper
   end
 
   # add methods to get welcome message
+  def self.scrape_welcome_header
+    #block-welcome > div > h2
+    self.get_page.css('section#block-welcome h2').text
+
+  end
+
+  def self.scrape_welcome_message
+    #block-welcome > div > p
+    self.get_page.css('section#block-welcome p').text
+  end
 
   # gets title and url of each itinerary, pushes them into an array, and returns array
   def self.scrape_itineraries

@@ -26,13 +26,8 @@ class BalboaParkItineraryIdeas::CLI
   # display welome message scrape from balboapark.org
   def welcome_message
     puts "------------------------------------------------------------------------------"
-    puts "Welcome to Balboa Park".blue.bold
-    puts "Ever changing. Always amazing."
-    puts "Where culture, science, and nature collide,"
-    puts "Balboa Park is home to more than 16 museums, multiple performing arts venues,"
-    puts "lovely gardens, trails, and many other creative and recreational attractions,"
-    puts "including the San Diego Zoo. With a variety of cultural institutions among its"
-    puts "1,200 beautiful and lushly planted acres, there is something for everyone."
+    puts "#{BalboaParkItineraryIdeas::Scraper.scrape_welcome_header}".blue.bold
+    puts "#{BalboaParkItineraryIdeas::Scraper.scrape_welcome_message}"
     puts "------------------------------------------------------------------------------"
   end
 
