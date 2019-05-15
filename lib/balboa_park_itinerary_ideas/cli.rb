@@ -32,9 +32,9 @@ class BalboaParkItineraryIdeas::CLI
   end
 
   # lists the itineraries for the user to choose from
-  # add: scrape "Itinerary Ideas" from page
   def list_itineraries
-    puts "Itinerary Ideas:".blue.bold
+    puts ""
+    puts "#{BalboaParkItineraryIdeas::Scraper.scrape_header}".blue.bold
     BalboaParkItineraryIdeas::Itinerary.all.each.with_index(1) do |itinerary, i|
       puts "#{i}.".green.bold + " #{itinerary.title}".bold
     end

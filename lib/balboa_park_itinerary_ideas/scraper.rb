@@ -5,16 +5,22 @@ class BalboaParkItineraryIdeas::Scraper
     Nokogiri::HTML(open(URL))
   end
 
-  # add methods to get welcome message
+  # gets welcome header
   def self.scrape_welcome_header
     #block-welcome > div > h2
     self.get_page.css('section#block-welcome h2').text
-
   end
 
+  # gets welome message
   def self.scrape_welcome_message
     #block-welcome > div > p
     self.get_page.css('section#block-welcome p').text
+  end
+
+  # gets 'Itinerary Ideas' header
+  def self.scrape_header
+    #block-views-block-itineraries-block-1 > h2
+    self.get_page.css('section#block-views-block-itineraries-block-1 h2').text
   end
 
   # gets title and url of each itinerary, pushes them into an array, and returns array
