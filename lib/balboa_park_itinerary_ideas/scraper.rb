@@ -42,10 +42,16 @@ class BalboaParkItineraryIdeas::Scraper
 
     scraped_details[:attractions] = []
     itinerary_page.css('div.field--name-field-stops div.field--item').each do |attraction|
-        description = attraction.css('p').text
         name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
+        description = attraction.css('p').text
 
-        scraped_details[:attractions].push(name: name, description: description)
+        if attraction.css('a').attr('href').nil?
+          attraction_url = ""
+        else
+          attraction_url = URL + attraction.css('a').attr('href').value
+        end
+
+        scraped_details[:attractions].push(name: name, description: description, attraction_url: attraction_url)
     end
     scraped_details[:attractions].reject! { |e|  e[:name] == nil }
 
