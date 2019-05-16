@@ -27,7 +27,7 @@ class BalboaParkItineraryIdeas::CLI
   def welcome_message
     puts "------------------------------------------------------------------------------"
     puts "#{BalboaParkItineraryIdeas::Scraper.scrape_welcome_header}".blue.bold
-    puts "#{BalboaParkItineraryIdeas::Scraper.scrape_welcome_message}"
+    puts Strings.wrap(BalboaParkItineraryIdeas::Scraper.scrape_welcome_message, 80)
     puts "------------------------------------------------------------------------------"
   end
 
@@ -70,8 +70,7 @@ class BalboaParkItineraryIdeas::CLI
   def print_details(itinerary)
     puts ""
     puts "#{itinerary.title}".blue.bold
-    # refactor....fix formatting
-    puts "#{itinerary.summary}".yellow
+    puts Strings.wrap(itinerary.summary, 86).yellow
     puts ""
     itinerary.print_attractions
     puts "Click for more info about the #{itinerary.title} Itinerary: ".green.bold

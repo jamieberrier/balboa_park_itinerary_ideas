@@ -35,7 +35,7 @@ class BalboaParkItineraryIdeas::Itinerary
   def print_attractions
     self.attractions.each do |x|
       puts "#{x[:name]}".bold.red
-      puts "#{x[:description]}"
+      puts Strings.wrap(x[:description], 75)
       if x[:attraction_url] != ""
         puts "Click for more info: ".green + "#{x[:attraction_url]}".green.underline
       end

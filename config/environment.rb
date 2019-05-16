@@ -2,6 +2,7 @@ require 'pry'
 require 'nokogiri'
 require 'open-uri'
 require 'colorize'
+require 'strings/extensions'
 
 require_relative '../lib/balboa_park_itinerary_ideas/version'
 require_relative '../lib/balboa_park_itinerary_ideas/cli'
