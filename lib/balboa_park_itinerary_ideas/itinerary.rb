@@ -30,16 +30,4 @@ class BalboaParkItineraryIdeas::Itinerary
   def self.find(id)
     self.all[id-1]
   end
-
-  # prints the details of each attraction
-  def print_attractions
-    self.attractions.each do |x|
-      puts "#{x[:name]}".bold.red
-      puts Strings.wrap(x[:description], 75)
-      if x[:attraction_url] != ""
-        puts "Click for more info: ".green + "#{x[:attraction_url]}".green.underline
-      end
-      puts ""
-    end
-  end
 end
