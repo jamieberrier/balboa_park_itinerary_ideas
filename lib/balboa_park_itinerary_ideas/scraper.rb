@@ -46,10 +46,16 @@ class BalboaParkItineraryIdeas::Scraper
 
         if itinerary_url.include?("birds")
           description_array = []
-          d1 = attraction.css('p')[0].text.strip
-          d2 = attraction.css('p')[1].text.strip
-          d3 = attraction.css('p')[2].text.strip
-
+          if attraction.css('p').text.include?("Toxostoma")
+            d1 = attraction.css('p')[1].text.strip
+            d2 = attraction.css('p')[2].text.strip
+            d3 = attraction.css('p')[3].text.strip
+          else
+            d1 = attraction.css('p')[0].text.strip
+            d2 = attraction.css('p')[1].text.strip
+            d3 = attraction.css('p')[2].text.strip
+          end
+          binding.pry
           descr = Strings.wrap(d1 + "\n", 86)
           diet = Strings.wrap("\n" + d2 + "\n", 86)
           nesting = Strings.wrap("\n" + d3, 86)
