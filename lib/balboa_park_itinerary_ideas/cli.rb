@@ -3,8 +3,6 @@ class BalboaParkItineraryIdeas::CLI
 
   def call
     make_itineraries
-    #remove to call in menu
-    add_attributes_to_itineraries
     welcome_message
     list_itineraries
     menu
@@ -14,15 +12,6 @@ class BalboaParkItineraryIdeas::CLI
   def make_itineraries
     itineraries_array = BalboaParkItineraryIdeas::Scraper.scrape_itineraries
     BalboaParkItineraryIdeas::Itinerary.create_from_collection(itineraries_array)
-  end
-
-  # add individual itinerary attributes scraped from the individual itinerary's page
-  def add_attributes_to_itineraries
-    #pass just itinerary_url and add URL in scraper
-    BalboaParkItineraryIdeas::Itinerary.all.each do |itinerary|
-      attributes = BalboaParkItineraryIdeas::Scraper.scrape_itinerary_page(BalboaParkItineraryIdeas::Scraper::URL + itinerary.itinerary_url)
-      itinerary.add_itinerary_attributes(attributes)
-    end
   end
 
   # display welome message scrape from balboapark.org
@@ -56,9 +45,8 @@ class BalboaParkItineraryIdeas::CLI
 
       if input.to_i > 0 && input.to_i <= 9 # use between or range/include?
         itinerary = BalboaParkItineraryIdeas::Itinerary.find(input.to_i)
-        #add attributes for selected itinerary
+        add_attributes(itinerary)
         print_details(itinerary)
-        #print_attractions(itinerary)
       elsif input == "list"
         list_itineraries
       elsif input == "exit"
@@ -69,17 +57,24 @@ class BalboaParkItineraryIdeas::CLI
     end
   end
 
+  # scrape and add the itinerary's attributes from the individual itinerary's page
+  def add_attributes(itinerary)
+    attributes = BalboaParkItineraryIdeas::Scraper.scrape_itinerary_page(itinerary.itinerary_url)
+    itinerary.add_itinerary_attributes(attributes)
+  end
+
   # displays the itinerary's details
   def print_details(itinerary)
     puts "\n#{itinerary.title}".blue.bold
-    puts Strings.wrap(itinerary.summary, 86).yellow
-    puts ""
-    
+    puts Strings.wrap(itinerary.summary+"\n", 86).yellow
+
     itinerary.attractions.each do |x|
       puts "#{x[:name]}".bold.red
       puts Strings.wrap(x[:description], 75)
       if x[:attraction_url] != ""
         puts "Click for more info: ".green + "#{x[:attraction_url]}\n".green.underline
+      else
+        puts "#{x[:attraction_url]}\n"
       end
     end
 

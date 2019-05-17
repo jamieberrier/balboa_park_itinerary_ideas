@@ -35,7 +35,7 @@ class BalboaParkItineraryIdeas::Scraper
 
   # gets the itinerary's attrubutes (summary and name & description of the attractions) from itinerary's page and returns hash with the attributes
   def self.scrape_itinerary_page(itinerary_url)
-    itinerary_page = Nokogiri::HTML(open(itinerary_url))
+    itinerary_page = Nokogiri::HTML(open(URL + itinerary_url))
     scraped_details = {}
 
     scraped_details[:summary] = itinerary_page.css('div.content div.field--type-text-with-summary p').text.strip
