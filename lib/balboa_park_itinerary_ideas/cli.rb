@@ -16,10 +16,11 @@ class BalboaParkItineraryIdeas::CLI
 
   # display welome message scrape from balboapark.org
   def welcome_message
-    puts "------------------------------------------------------------------------------"
+    @border = "------------------------------------------------------------------------------"
+    puts @border
     puts "#{BalboaParkItineraryIdeas::Scraper.scrape_welcome_header}".blue.bold
     puts Strings.wrap(BalboaParkItineraryIdeas::Scraper.scrape_welcome_message, 80)
-    puts "------------------------------------------------------------------------------"
+    puts @border
   end
 
   # lists the itineraries for the user to choose from
@@ -34,12 +35,12 @@ class BalboaParkItineraryIdeas::CLI
   def menu
     input = nil
     while input != "exit"
-      puts "-------------------------------------------------------------------"
+      puts @border
       puts "What would you like to do? Your choices are:".green.bold
       puts "Type the itinerary number " + "('1', '2', '3'....'9')".red.bold + " to see the details"
       puts "Type " + "list".red.bold + " to see the list again"
       puts "Type " + "exit".red.bold
-      puts "-------------------------------------------------------------------"
+      puts @border
 
       input = gets.strip.downcase
 
@@ -79,7 +80,7 @@ class BalboaParkItineraryIdeas::CLI
     end
 
     puts "Click for more info about the #{itinerary.title} Itinerary: ".green.bold
-    puts "#{BalboaParkItineraryIdeas::Scraper::URL}#{itinerary.itinerary_url}\n".green.underline
+    puts "#{itinerary.itinerary_url}\n".green.underline
   end
 
   # displays exit message to the user

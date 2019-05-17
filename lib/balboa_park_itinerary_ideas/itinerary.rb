@@ -1,6 +1,6 @@
 class BalboaParkItineraryIdeas::Itinerary
 
-  attr_accessor :title, :itinerary_url, :summary, :attractions # an array of hashes with names & descriptions of the attractions
+  attr_accessor :title, :itinerary_url, :summary, :attractions # an array of hashes with names, descriptions, and URLs of the attractions
 
   @@all = []
 
