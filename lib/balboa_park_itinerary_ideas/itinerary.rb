@@ -30,22 +30,4 @@ class BalboaParkItineraryIdeas::Itinerary
   def self.find(id)
     self.all[id-1]
   end
-
-  # formats the description of the attractions for the Birds of Balboa Itinerary
-  def self.format_description(attractions_hash)
-    attractions_hash.each do |attraction|
-      description_array = []
-
-      a1 = attraction[:description].partition(/D\w+:/)
-      a2 = a1[2].partition(/\w+ \w+ \w+ \w+:/)
-      a3 = a2[2].partition(/N\w+ \w+:/)
-
-      description = Strings.wrap(a1[1] + a2[0] + "\n", 75)
-      diet = Strings.wrap("\n" + a2[1] + a3[0] + "\n", 75)
-      nesting = Strings.wrap("\n" + a3[1] + a3[2], 75)
-
-      description_array.push(description, diet, nesting)
-      attraction[:description] = description_array
-    end
-  end
 end

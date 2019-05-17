@@ -43,7 +43,22 @@ class BalboaParkItineraryIdeas::Scraper
     scraped_details[:attractions] = []
     itinerary_page.css('div.field--name-field-stops div.field--item').each do |attraction|
         name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
-        description = attraction.css('p').text
+
+        if itinerary_url.include?("birds")
+          description_array = []
+          d1 = attraction.css('p')[0].text.strip
+          d2 = attraction.css('p')[1].text.strip
+          d3 = attraction.css('p')[2].text.strip
+
+          descr = Strings.wrap(d1 + "\n", 86)
+          diet = Strings.wrap("\n" + d2 + "\n", 86)
+          nesting = Strings.wrap("\n" + d3, 86)
+
+          description_array.push(descr, diet, nesting)
+          description = description_array
+        else
+          description = attraction.css('p').text
+        end
 
         if attraction.css('a').attr('href').nil?
           attraction_url = ""
@@ -54,10 +69,7 @@ class BalboaParkItineraryIdeas::Scraper
         scraped_details[:attractions].push(name: name, description: description, attraction_url: attraction_url)#.reject! { |e|  e[:name] == nil }
         scraped_details[:attractions].reject! { |e|  e[:name] == nil }
     end
-    
-    if itinerary_url.include?("birds")
-      BalboaParkItineraryIdeas::Itinerary.format_description(scraped_details[:attractions])
-    end
+
     scraped_details
   end
 end
