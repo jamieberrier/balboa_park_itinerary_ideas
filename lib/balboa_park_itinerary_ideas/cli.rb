@@ -14,7 +14,7 @@ class BalboaParkItineraryIdeas::CLI
     BalboaParkItineraryIdeas::Itinerary.create_from_collection(itineraries_array)
   end
 
-  # display welome message scrape from balboapark.org
+  # displays welome message scrape from balboapark.org
   def welcome_message
     @border = "------------------------------------------------------------------------------"
     puts @border
@@ -44,7 +44,7 @@ class BalboaParkItineraryIdeas::CLI
 
       input = gets.strip.downcase
 
-      if input.to_i > 0 && input.to_i <= 9 # use between or range/include?
+      if input.to_i.between?(1,9)
         itinerary = BalboaParkItineraryIdeas::Itinerary.find(input.to_i)
         add_attributes(itinerary)
         print_details(itinerary)
@@ -58,35 +58,31 @@ class BalboaParkItineraryIdeas::CLI
     end
   end
 
-  # scrape and add the itinerary's attributes from the individual itinerary's page
+  # scrapes and adds the itinerary's attributes from the individual itinerary's page
   def add_attributes(itinerary)
     attributes = BalboaParkItineraryIdeas::Scraper.scrape_itinerary_page(itinerary.itinerary_url)
     itinerary.add_itinerary_attributes(attributes)
   end
 
-  # displays the itinerary's details
+  # displays the itinerary's details: title, summary along with each attraction's name, description, and URL (if has one)
   def print_details(itinerary)
     puts "\n#{itinerary.title}".blue.bold
-    puts Strings.wrap(itinerary.summary+"\n", 86).yellow
+    puts Strings.wrap(itinerary.summary, 86).yellow
 
     itinerary.attractions.each do |x|
-      puts "#{x[:name]}".bold.red
+      puts "\n#{x[:name]}".bold.red
       puts Strings.wrap(x[:description], 75)
-      if x[:attraction_url] != ""
-        puts "Click for more info: ".green + "#{x[:attraction_url]}\n".green.underline
-      else
-        puts "#{x[:attraction_url]}\n"
+      unless x[:attraction_url] == ""
+        puts "Click for more info: ".green.bold + "#{x[:attraction_url]}".green.underline
       end
     end
 
-    puts "Click for more info about the #{itinerary.title} Itinerary: ".green.bold
+    puts "\nClick below for more information about the ".red + "#{itinerary.title} Itinerary:".red.bold
     puts "#{itinerary.itinerary_url}\n".green.underline
   end
 
   # displays exit message to the user
   def goodbye
-    puts ""
-    puts "Goodbye! Hope to see you soon!".green.bold
-    puts ""
+    puts "\nGoodbye! Comeback soon!\n".green.bold
   end
 end

@@ -7,30 +7,27 @@ class BalboaParkItineraryIdeas::Scraper
 
   # gets welcome header
   def self.scrape_welcome_header
-    #block-welcome > div > h2
     self.get_page.css('section#block-welcome h2').text
   end
 
   # gets welome message
   def self.scrape_welcome_message
-    #block-welcome > div > p
     self.get_page.css('section#block-welcome p').text
   end
 
   # gets 'Itinerary Ideas' header
   def self.scrape_header
-    #block-views-block-itineraries-block-1 > h2
     self.get_page.css('section#block-views-block-itineraries-block-1 h2').text
   end
 
-  # gets title and url of each itinerary, pushes them into an array, and returns array
+  # gets title and url of each itinerary, pushes attributes into array, and returns array
   def self.scrape_itineraries
     itineraries = []
 
     self.get_page.css('div.view-itineraries span.field-content').each do |itinerary|
       title = itinerary.css('a').text
       itinerary_url = URL + itinerary.css('a').attribute("href").value
-      
+
       itineraries.push(title: title, itinerary_url: itinerary_url)
     end
     itineraries
@@ -54,9 +51,9 @@ class BalboaParkItineraryIdeas::Scraper
           attraction_url = URL + attraction.css('a').attr('href').value
         end
 
-        scraped_details[:attractions].push(name: name, description: description, attraction_url: attraction_url)
+        scraped_details[:attractions].push(name: name, description: description, attraction_url: attraction_url).reject! { |e|  e[:name] == nil }
     end
-    scraped_details[:attractions].reject! { |e|  e[:name] == nil }
+    #scraped_details[:attractions].reject! { |e|  e[:name] == nil }
 
     scraped_details
   end
