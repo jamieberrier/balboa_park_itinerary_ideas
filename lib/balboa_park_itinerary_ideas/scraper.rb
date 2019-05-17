@@ -51,10 +51,13 @@ class BalboaParkItineraryIdeas::Scraper
           attraction_url = URL + attraction.css('a').attr('href').value
         end
 
-        scraped_details[:attractions].push(name: name, description: description, attraction_url: attraction_url).reject! { |e|  e[:name] == nil }
+        scraped_details[:attractions].push(name: name, description: description, attraction_url: attraction_url)#.reject! { |e|  e[:name] == nil }
+        scraped_details[:attractions].reject! { |e|  e[:name] == nil }
     end
-    #scraped_details[:attractions].reject! { |e|  e[:name] == nil }
-
+    
+    if itinerary_url.include?("birds")
+      BalboaParkItineraryIdeas::Itinerary.format_description(scraped_details[:attractions])
+    end
     scraped_details
   end
 end
