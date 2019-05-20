@@ -33,13 +33,21 @@ class BalboaParkItineraryIdeas::Scraper
     itineraries
   end
 
-  # gets the itinerary's attrubutes (summary and name & description of the attractions) from itinerary's page and returns hash with the attributes
+  # gets the itinerary's attrubutes of summary and attractions (name, description & URL) from itinerary's page and returns hash with the attributes
   def self.scrape_itinerary_page(itinerary_url)
     itinerary_page = Nokogiri::HTML(open(itinerary_url))
     scraped_details = {}
-
-    scraped_details[:summary] = itinerary_page.css('div.content div.field--type-text-with-summary p').text.strip
-
+    # Summary
+      # Handles: Explorer itinerary summary has a href with jpeg in the summary
+    if itinerary_url.include?("explorer")
+      sum = itinerary_page.css('div.content div.field--type-text-with-summary p')
+      node = sum.css('a')[0]
+      node.content = "Explorer Pass"
+      scraped_details[:summary] = sum.text.strip
+    else
+      scraped_details[:summary] = itinerary_page.css('div.content div.field--type-text-with-summary p').text.strip
+    end
+    # Attractions
     scraped_details[:attractions] = []
     itinerary_page.css('div.field--name-field-stops div.field--item').each do |attraction|
         name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
@@ -64,10 +72,11 @@ class BalboaParkItineraryIdeas::Scraper
 
           description_array.push(descr, diet, nesting)
           description = description_array
-        else
+        else # all other itineraries
           description = attraction.css('p').text
         end
-        # Handles: not all attractions have a URL
+        # URL
+          # Handles: not all attractions have a URL
         if attraction.css('a').attr('href').nil?
           attraction_url = ""
         else
