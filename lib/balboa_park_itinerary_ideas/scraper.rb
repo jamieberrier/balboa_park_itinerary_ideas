@@ -40,10 +40,7 @@ class BalboaParkItineraryIdeas::Scraper
     # Summary
       # Handles: Explorer itinerary summary has a href with jpeg in the summary
     if itinerary_url.include?("explorer")
-      sum = itinerary_page.css('div.content div.field--type-text-with-summary p')
-      node = sum.css('a')[0]
-      node.content = "Explorer Pass"
-      scraped_details[:summary] = sum.text.strip
+      scraped_details[:summary] = self.get_explorer_summary(itinerary_page)
     else
       scraped_details[:summary] = itinerary_page.css('div.content div.field--type-text-with-summary p').text.strip
     end
@@ -53,25 +50,7 @@ class BalboaParkItineraryIdeas::Scraper
         name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
         # Handles: The Birds of Balboa Park itinerary has 3 paragraphs of text
         if itinerary_url.include?("birds")
-          description_array = []
-          # Handles: The California Thrasher has its latin name as <p> instead of <em> like the rest
-          if attraction.css('p').text.include?("Toxostoma")
-            d1 = attraction.css('p')[1].text.strip
-            d2 = attraction.css('p')[2].text.strip
-            d3 = attraction.css('p')[3].text.strip
-          else
-            d1 = attraction.css('p')[0].text.strip
-            d2 = attraction.css('p')[1].text.strip
-            # Handles: The Red Shouldered Hawk's 'Nesting habits' has leading whitespace that .strip doesn't remove
-            d3 = attraction.css('p')[2].text.gsub(/\A[[:space:]]+|[[:space:]]+\z/, '') # removes leading & trailing spaces
-          end
-          # formats the 3 paragraphs
-          descr = Strings.wrap(d1 + "\n", 86)
-          diet = Strings.wrap("\n" + d2 + "\n", 86)
-          nesting = Strings.wrap("\n" + d3, 86)
-
-          description_array.push(descr, diet, nesting)
-          description = description_array
+          description = self.get_birds_attraction_description(attraction)
         else # all other itineraries
           description = attraction.css('p').text
         end
@@ -87,5 +66,34 @@ class BalboaParkItineraryIdeas::Scraper
         scraped_details[:attractions].reject! { |e|  e[:name] == nil }
     end
     scraped_details
+  end
+
+  def self.get_explorer_summary(itinerary_page)
+    sum = itinerary_page.css('div.content div.field--type-text-with-summary p')
+    node = sum.css('a')[0]
+    node.content = "Explorer Pass"
+    sum.text.strip
+  end
+
+  def self.get_birds_attraction_description(attraction)
+    description_array = []
+    # Handles: The California Thrasher has its latin name as <p> instead of <em> like the rest
+    if attraction.css('p').text.include?("Toxostoma")
+      d1 = attraction.css('p')[1].text.strip
+      d2 = attraction.css('p')[2].text.strip
+      d3 = attraction.css('p')[3].text.strip
+    else
+      d1 = attraction.css('p')[0].text.strip
+      d2 = attraction.css('p')[1].text.strip
+      # Handles: The Red Shouldered Hawk's 'Nesting habits' has leading whitespace that .strip doesn't remove
+      d3 = attraction.css('p')[2].text.gsub(/\A[[:space:]]+|[[:space:]]+\z/, '') # removes leading & trailing spaces
+    end
+    # formats the 3 paragraphs
+    descr = Strings.wrap(d1 + "\n", 86)
+    diet = Strings.wrap("\n" + d2 + "\n", 86)
+    nesting = Strings.wrap("\n" + d3, 86)
+
+    description_array.push(descr, diet, nesting)
+    #description = description_array
   end
 end
