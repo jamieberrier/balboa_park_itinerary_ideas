@@ -43,9 +43,10 @@ class BalboaParkItineraryIdeas::Scraper
     scraped_details[:attractions] = []
     itinerary_page.css('div.field--name-field-stops div.field--item').each do |attraction|
         name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
-
+        # Handles: The Birds of Balboa Park itinerary has 3 paragraphs of text
         if itinerary_url.include?("birds")
           description_array = []
+          # Handles: The California Thrasher has its latin name as <p> instead of <em> like the rest
           if attraction.css('p').text.include?("Toxostoma")
             d1 = attraction.css('p')[1].text.strip
             d2 = attraction.css('p')[2].text.strip
@@ -53,9 +54,10 @@ class BalboaParkItineraryIdeas::Scraper
           else
             d1 = attraction.css('p')[0].text.strip
             d2 = attraction.css('p')[1].text.strip
-            d3 = attraction.css('p')[2].text.strip
+            # Handles: The Red Shouldered Hawk's 'Nesting habits' has leading whitespace that .strip doesn't remove
+            d3 = attraction.css('p')[2].text.gsub(/\A[[:space:]]+|[[:space:]]+\z/, '') # removes leading & trailing spaces
           end
-          binding.pry
+          # formats the 3 paragraphs
           descr = Strings.wrap(d1 + "\n", 86)
           diet = Strings.wrap("\n" + d2 + "\n", 86)
           nesting = Strings.wrap("\n" + d3, 86)
@@ -65,17 +67,16 @@ class BalboaParkItineraryIdeas::Scraper
         else
           description = attraction.css('p').text
         end
-
+        # Handles: not all attractions have a URL
         if attraction.css('a').attr('href').nil?
           attraction_url = ""
         else
           attraction_url = URL + attraction.css('a').attr('href').value
         end
 
-        scraped_details[:attractions].push(name: name, description: description, attraction_url: attraction_url)#.reject! { |e|  e[:name] == nil }
+        scraped_details[:attractions].push(name: name, description: description, attraction_url: attraction_url)
         scraped_details[:attractions].reject! { |e|  e[:name] == nil }
     end
-
     scraped_details
   end
 end
