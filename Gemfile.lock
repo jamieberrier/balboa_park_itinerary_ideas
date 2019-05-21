@@ -2,6 +2,9 @@ PATH
   remote: .
   specs:
     balboa_park_itinerary_ideas (0.1.0)
+      colorize (~> 0.8.1)
+      nokogiri (~> 1.10, >= 1.10.3)
+      strings (~> 0.1.4)
 
 GEM
   remote: https://rubygems.org/
@@ -31,10 +34,10 @@ DEPENDENCIES
   balboa_park_itinerary_ideas!
   bundler (~> 2.0)
   colorize (~> 0.8.1)
-  nokogiri
+  nokogiri (~> 1.10, >= 1.10.3)
   pry
   rake (~> 10.0)
-  strings
+  strings (~> 0.1.4)
 
 BUNDLED WITH
    2.0.1
