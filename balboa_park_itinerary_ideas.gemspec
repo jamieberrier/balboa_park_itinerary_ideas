@@ -6,9 +6,9 @@ require "balboa_park_itinerary_ideas/version"
 Gem::Specification.new do |spec|
   spec.name          = "balboa_park_itinerary_ideas"
   spec.version       = BalboaParkItineraryIdeas::VERSION
-  spec.authors       = ["'jamieberrier'"]
-  spec.email         = ["'berrier.jamie@gmail.com'"]
-
+  spec.authors       = ["jamieberrier"]
+  spec.email         = ["berrier.jamie@gmail.com"]
+  #spec.files         = ["lib/balboa_park_itinerary_ideas/balboa_park_itinerary_ideas.rb", "lib/balboa_park_itinerary_ideas/cli.rb", "lib/balboa_park_itinerary_ideas/scraper.rb", "lib/balboa_park_itinerary_ideas/itinerary.rb", "config/environment"]
   spec.summary       = "Balboa Park Itinerary Ideas"
   spec.description   = "A Ruby Gem providing a CLI to view itinerary ideas for San Diego's Balboa Park as per the Balboa Park website."
   spec.homepage      = "https://rubygems.org/gems/balboa_park_itinerary_ideas"
@@ -33,7 +33,8 @@ Gem::Specification.new do |spec|
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   end
   spec.bindir        = "exe"
-  spec.executables   = "balboa_park_itinerary_ideas"
+  #spec.executables   = "balboa_park_itinerary_ideas"
+  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 2.0"
