@@ -2,7 +2,29 @@
 
 A Ruby Gem providing a CLI to view the itinerary ideas for San Diego's Balboa Park and the details about a selected itinerary as per the Balboa Park website.
 
-## Installation
+## Installation - RubyGems
+
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'balboa_park_itinerary_ideas'
+```
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install balboa_park_itinerary_ideas
+
+## Usage - RubyGems
+
+Type the below and follow the on screen prompts
+
+    $ balboa_park_itinerary_ideas
+
+## Installation - GitHub
 
 Go To: https://github.com/jamieberrier/balboa_park_itinerary_ideas
 Click: 'Clone or download' button
@@ -12,7 +34,7 @@ git clone git@github.com:jamieberrier/balboa_park_itinerary_ideas.git
 
 cd balboa_park_itinerary_ideas
 
-## Usage
+## Usage - GitHub
 
 Type: bin/balboa_park_itinerary_ideas
 
