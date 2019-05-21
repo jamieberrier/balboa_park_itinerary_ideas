@@ -11,13 +11,13 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Balboa Park Itinerary Ideas"
   spec.description   = "A Ruby Gem providing a CLI to view itinerary ideas for San Diego's Balboa Park as per the Balboa Park website."
-  spec.homepage      = "https://github.com/jamieberrier/balboa_park_itinerary_ideas"
+  spec.homepage      = "https://rubygems.org/gems/balboa_park_itinerary_ideas"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+    spec.metadata["allowed_push_host"] = "'https://rubygems.org'"
 
     spec.metadata["homepage_uri"] = spec.homepage
     spec.metadata["source_code_uri"] = "https://github.com/jamieberrier/balboa_park_itinerary_ideas"
