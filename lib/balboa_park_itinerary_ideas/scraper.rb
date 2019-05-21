@@ -38,8 +38,7 @@ class BalboaParkItineraryIdeas::Scraper
     itinerary_page = Nokogiri::HTML(open(itinerary_url))
     scraped_details = {}
     # Summary
-      # Handles: Explorer itinerary summary has a href with jpeg in the summary
-    if itinerary_url.include?("explorer")
+    if itinerary_url.include?("explorer") # Explorer itinerary summary has a href with jpeg in the summary
       scraped_details[:summary] = self.get_explorer_summary(itinerary_page)
     else
       scraped_details[:summary] = itinerary_page.css('div.content div.field--type-text-with-summary p').text.strip
@@ -47,27 +46,28 @@ class BalboaParkItineraryIdeas::Scraper
     # Attractions
     scraped_details[:attractions] = []
     itinerary_page.css('div.field--name-field-stops div.field--item').each do |attraction|
-        name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
-        # Handles: The Birds of Balboa Park itinerary has 3 paragraphs of text
-        if itinerary_url.include?("birds")
-          description = self.get_birds_attraction_description(attraction)
-        else # all other itineraries
-          description = attraction.css('p').text
-        end
-        # URL
-          # Handles: not all attractions have a URL
-        if attraction.css('a').attr('href').nil?
-          attraction_url = ""
-        else
-          attraction_url = URL + attraction.css('a').attr('href').value
-        end
+      # name
+      name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
+      # description
+      if itinerary_url.include?("birds") # The Birds of Balboa Park itinerary has 3 paragraphs of text
+        description = self.get_birds_attraction_description(attraction)
+      else # all other itineraries
+        description = attraction.css('p').text
+      end
+      # URL
+      if attraction.css('a').attr('href').nil? # not all attractions have a URL
+        attraction_url = ""
+      else
+        attraction_url = URL + attraction.css('a').attr('href').value
+      end
 
-        scraped_details[:attractions].push(name: name, description: description, attraction_url: attraction_url)
-        scraped_details[:attractions].reject! { |e|  e[:name] == nil }
-    end
+      scraped_details[:attractions].push(name: name, description: description, attraction_url: attraction_url)
+      scraped_details[:attractions].reject! { |e|  e[:name] == nil }
+    end # end of each
     scraped_details
   end
 
+  # Handles that the Explorer itinerary summary has a href with jpeg in its summary
   def self.get_explorer_summary(itinerary_page)
     sum = itinerary_page.css('div.content div.field--type-text-with-summary p')
     node = sum.css('a')[0]
@@ -75,9 +75,10 @@ class BalboaParkItineraryIdeas::Scraper
     sum.text.strip
   end
 
+  # Handles that the Birds of Balboa Park itinerary has 3 paragraphs of text
   def self.get_birds_attraction_description(attraction)
     description_array = []
-    # Handles: The California Thrasher has its latin name as <p> instead of <em> like the rest
+    # The California Thrasher has its latin name as <p> instead of <em> like the rest
     if attraction.css('p').text.include?("Toxostoma")
       d1 = attraction.css('p')[1].text.strip
       d2 = attraction.css('p')[2].text.strip
@@ -94,6 +95,5 @@ class BalboaParkItineraryIdeas::Scraper
     nesting = Strings.wrap("\n" + d3, 86)
 
     description_array.push(descr, diet, nesting)
-    #description = description_array
   end
 end
