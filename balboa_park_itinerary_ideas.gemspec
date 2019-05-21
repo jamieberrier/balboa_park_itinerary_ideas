@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = BalboaParkItineraryIdeas::VERSION
   spec.authors       = ["'jamieberrier'"]
   spec.email         = ["'berrier.jamie@gmail.com'"]
-  spec.files         = ["lib/balboa_park_itinerary_ideas/balboa_park_itinerary_ideas.rb", "lib/balboa_park_itinerary_ideas/cli.rb", "lib/balboa_park_itinerary_ideas/scraper.rb", "lib/balboa_park_itinerary_ideas/itinerary.rb", "config/environment.rb"]
+
   spec.summary       = "Balboa Park Itinerary Ideas"
   spec.description   = "A Ruby Gem providing a CLI to view itinerary ideas for San Diego's Balboa Park as per the Balboa Park website."
   spec.homepage      = "https://rubygems.org/gems/balboa_park_itinerary_ideas"
