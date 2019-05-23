@@ -20,9 +20,9 @@ Or install it yourself as:
 
 ## Usage - RubyGems
 
-Type the below and follow the on screen prompts
-
     $ balboa_park_itinerary_ideas
+
+And then follow the on screen prompts
 
 ## Installation - GitHub
 
@@ -30,15 +30,20 @@ Go To: https://github.com/jamieberrier/balboa_park_itinerary_ideas
 Click: 'Clone or download' button
 Click: clipboard icon ('Clone with SSH')
 
-git clone git@github.com:jamieberrier/balboa_park_itinerary_ideas.git
+Type:
+  $ git clone
 
-cd balboa_park_itinerary_ideas
+And then paste, or type below
+  $ git clone git@github.com:jamieberrier/balboa_park_itinerary_ideas.git
+
+Then type:
+  $ cd balboa_park_itinerary_ideas
 
 ## Usage - GitHub
 
-Type: bin/balboa_park_itinerary_ideas
+  $ bin/balboa_park_itinerary_ideas
 
-Follow the on screen prompts
+And then follow the on screen prompts
 
 ## Development
 
