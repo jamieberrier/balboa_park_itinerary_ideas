@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    balboa_park_itinerary_ideas (0.1.5)
+    balboa_park_itinerary_ideas (0.1.0)
       colorize (~> 0.8.1)
       nokogiri (~> 1.10)
       strings (~> 0.1.4)

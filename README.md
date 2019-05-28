@@ -22,6 +22,9 @@ And then paste, or type:
 Then type:
   $ cd balboa_park_itinerary_ideas
 
+Finally:
+  $ bundle install
+
 ## Usage - GitHub
 
   $ bin/balboa_park_itinerary_ideas
