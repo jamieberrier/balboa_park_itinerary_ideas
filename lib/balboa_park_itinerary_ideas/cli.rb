@@ -39,7 +39,7 @@ class BalboaParkItineraryIdeas::CLI
   # displays the user's choices, gets the user's input, and either displays details of an itinerary, the list of itineraries, or exits
   def menu
     input = nil
-    
+
     while input != "exit"
       puts @border
       puts "What would you like to do? Your choices are:".green.bold
@@ -69,10 +69,13 @@ class BalboaParkItineraryIdeas::CLI
     puts "\n#{itinerary.title}".blue.bold
     puts Strings.wrap(itinerary.summary, 86).yellow
 
-    itinerary.attractions.each do |a|
-      puts "\n#{a[:name]}".bold.red
-      puts Strings.wrap(a[:description], 75)
-      puts "Click for more info: ".green.bold + "#{a[:attraction_url]}".green.underline unless a[:attraction_url].nil?
+    itinerary.attractions.each do |attraction|
+      puts "\n#{attraction[:name]}".bold.red
+      puts Strings.wrap(attraction[:description], 75)
+      
+      unless attraction[:attraction_url].nil?
+        puts "Click for more info: ".green.bold + "#{attraction[:attraction_url]}".green.underline
+      end
     end
 
     puts "\nClick below for more information about the ".red + "#{itinerary.title} Itinerary:".red.bold
