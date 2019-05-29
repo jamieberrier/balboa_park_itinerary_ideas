@@ -1,3 +1,4 @@
+require 'openssl'
 require 'pry'
 require 'nokogiri'
 require 'open-uri'

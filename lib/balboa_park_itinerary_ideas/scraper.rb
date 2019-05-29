@@ -3,7 +3,8 @@ class BalboaParkItineraryIdeas::Scraper
 
   # creates instances of Itinerary with title and url for each itinerary
   def scrape_itineraries
-    @doc = Nokogiri::HTML(open(URL))
+    #@doc = Nokogiri::HTML(open(URL))
+    @doc = Nokogiri::HTML(open(URL, ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE))
     @doc.css('div.view-itineraries span.field-content').each do |x|
 
       itinerary = BalboaParkItineraryIdeas::Itinerary.new
@@ -31,7 +32,8 @@ class BalboaParkItineraryIdeas::Scraper
 
   # gets the itinerary's attrubutes of summary and attractions (name, description & URL) from itinerary's page and returns hash with the attributes
   def scrape_itinerary_page(itinerary_url)
-    itinerary_page = Nokogiri::HTML(open(itinerary_url))
+    #itinerary_page = Nokogiri::HTML(open(itinerary_url))
+    itinerary_page = Nokogiri::HTML(open(itinerary_url, ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE))
     scraped_details = {}
     # Summary
     if itinerary_url.include?("explorer") # Explorer itinerary summary has a href with jpeg in the summary
