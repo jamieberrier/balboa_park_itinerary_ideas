@@ -13,11 +13,7 @@ class BalboaParkItineraryIdeas::Scraper
       itinerary.save
     end
   end
-=begin
-  def self.get_page
-    Nokogiri::HTML(open(URL))
-  end
-=end
+
   # gets welcome header
   def scrape_welcome_header
     @doc.css('section#block-welcome h2').text
@@ -46,9 +42,10 @@ class BalboaParkItineraryIdeas::Scraper
     # Attractions
     scraped_details[:attractions] = []
     itinerary_page.css('div.field--name-field-stops div.field--item').each do |attraction|
-      # name
+      # attraction name
       name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
-      # description
+      name.strip! unless name == nil
+      # attraction description
       if itinerary_url.include?("birds") # The Birds of Balboa Park itinerary has 3 paragraphs of text
         description = get_birds_attraction_description(attraction)
       else # all other itineraries
@@ -63,6 +60,7 @@ class BalboaParkItineraryIdeas::Scraper
 
       scraped_details[:attractions].push(name: name, description: description, attraction_url: attraction_url)
       scraped_details[:attractions].reject! { |e|  e[:name] == nil }
+
     end # end of each
     scraped_details
   end
