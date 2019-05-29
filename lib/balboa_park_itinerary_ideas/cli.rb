@@ -48,7 +48,7 @@ class BalboaParkItineraryIdeas::CLI
 
       if input.to_i.between?(1,9)
         itinerary = BalboaParkItineraryIdeas::Itinerary.find(input.to_i)
-        add_attributes(itinerary)
+        @s.scrape_itinerary_page(itinerary)
         print_details(itinerary)
       elsif input == "list"
         list_itineraries
@@ -60,23 +60,15 @@ class BalboaParkItineraryIdeas::CLI
     end
   end
 
-  # scrapes and adds the itinerary's summary and attractions from the individual itinerary's page
-  def add_attributes(itinerary)
-    attributes = @s.scrape_itinerary_page(itinerary.url)
-    itinerary.add_itinerary_attributes(attributes)
-  end
-
   # displays the itinerary's details: title, summary, and each attraction's name, description, and URL (if has one)
   def print_details(itinerary)
     puts "\n#{itinerary.title}".blue.bold
     puts Strings.wrap(itinerary.summary, 86).yellow
 
-    itinerary.attractions.each do |x|
-      puts "\n#{x[:name]}".bold.red
-      puts Strings.wrap(x[:description], 75)
-      unless x[:attraction_url] == ""
-        puts "Click for more info: ".green.bold + "#{x[:attraction_url]}".green.underline
-      end
+    itinerary.attractions.each do |a|
+      puts "\n#{a[:name]}".bold.red
+      puts Strings.wrap(a[:description], 75)
+      puts "Click for more info: ".green.bold + "#{a[:attraction_url]}".green.underline unless a[:attraction_url].nil?
     end
 
     puts "\nClick below for more information about the ".red + "#{itinerary.title} Itinerary:".red.bold
