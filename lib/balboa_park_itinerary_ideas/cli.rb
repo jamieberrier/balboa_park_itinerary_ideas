@@ -55,7 +55,7 @@ class BalboaParkItineraryIdeas::CLI
 
   # scrapes and adds the itinerary's attributes from the individual itinerary's page
   def add_attributes(itinerary)
-    attributes = BalboaParkItineraryIdeas::Scraper.new.scrape_itinerary_page(itinerary.url)
+    attributes = @s.scrape_itinerary_page(itinerary.url)
     itinerary.add_itinerary_attributes(attributes)
   end
 
