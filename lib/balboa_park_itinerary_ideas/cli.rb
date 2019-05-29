@@ -2,7 +2,8 @@
 class BalboaParkItineraryIdeas::CLI
 
   def call
-    BalboaParkItineraryIdeas::Scraper.new.scrape_itineraries
+    @s = BalboaParkItineraryIdeas::Scraper.new
+    @s.scrape_itineraries
     welcome_message
     list_itineraries
     menu
@@ -12,14 +13,14 @@ class BalboaParkItineraryIdeas::CLI
   def welcome_message
     @border = "------------------------------------------------------------------------------"
     puts @border
-    puts "#{BalboaParkItineraryIdeas::Scraper.scrape_welcome_header}".blue.bold
-    puts Strings.wrap(BalboaParkItineraryIdeas::Scraper.scrape_welcome_message, 80)
+    puts "#{@s.scrape_welcome_header}".blue.bold
+    puts Strings.wrap(@s.scrape_welcome_message, 80)
     puts @border
   end
 
   # lists the itineraries for the user to choose from
   def list_itineraries
-    puts "\n#{BalboaParkItineraryIdeas::Scraper.scrape_header}".blue.bold
+    puts "\n#{@s.scrape_header}".blue.bold
     BalboaParkItineraryIdeas::Itinerary.all.each.with_index(1) do |itinerary, i|
       puts "#{i}.".red.bold + " #{itinerary.title}".bold
     end
@@ -54,7 +55,7 @@ class BalboaParkItineraryIdeas::CLI
 
   # scrapes and adds the itinerary's attributes from the individual itinerary's page
   def add_attributes(itinerary)
-    attributes = BalboaParkItineraryIdeas::Scraper.scrape_itinerary_page(itinerary.url)
+    attributes = BalboaParkItineraryIdeas::Scraper.new.scrape_itinerary_page(itinerary.url)
     itinerary.add_itinerary_attributes(attributes)
   end
 

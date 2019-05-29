@@ -1,25 +1,6 @@
 class BalboaParkItineraryIdeas::Scraper
   URL = "https://www.balboapark.org"
 
-  def self.get_page
-    Nokogiri::HTML(open(URL))
-  end
-
-  # gets welcome header
-  def self.scrape_welcome_header
-    self.get_page.css('section#block-welcome h2').text
-  end
-
-  # gets welome message
-  def self.scrape_welcome_message
-    self.get_page.css('section#block-welcome p').text
-  end
-
-  # gets 'Itinerary Ideas' header
-  def self.scrape_header
-    self.get_page.css('section#block-views-block-itineraries-block-1 h2').text
-  end
-
   # gets title and url of each itinerary
   def scrape_itineraries
     @doc = Nokogiri::HTML(open(URL))
@@ -33,13 +14,32 @@ class BalboaParkItineraryIdeas::Scraper
     end
   end
 
+  def self.get_page
+    Nokogiri::HTML(open(URL))
+  end
+
+  # gets welcome header
+  def scrape_welcome_header
+    @doc.css('section#block-welcome h2').text
+  end
+
+  # gets welome message
+  def scrape_welcome_message
+    @doc.css('section#block-welcome p').text
+  end
+
+  # gets 'Itinerary Ideas' header
+  def scrape_header
+    @doc.css('section#block-views-block-itineraries-block-1 h2').text
+  end
+
   # gets the itinerary's attrubutes of summary and attractions (name, description & URL) from itinerary's page and returns hash with the attributes
-  def self.scrape_itinerary_page(itinerary_url)
+  def scrape_itinerary_page(itinerary_url)
     itinerary_page = Nokogiri::HTML(open(itinerary_url))
     scraped_details = {}
     # Summary
     if itinerary_url.include?("explorer") # Explorer itinerary summary has a href with jpeg in the summary
-      scraped_details[:summary] = self.get_explorer_summary(itinerary_page)
+      scraped_details[:summary] = get_explorer_summary(itinerary_page)
     else
       scraped_details[:summary] = itinerary_page.css('div.content div.field--type-text-with-summary p').text.strip
     end
@@ -50,7 +50,7 @@ class BalboaParkItineraryIdeas::Scraper
       name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
       # description
       if itinerary_url.include?("birds") # The Birds of Balboa Park itinerary has 3 paragraphs of text
-        description = self.get_birds_attraction_description(attraction)
+        description = get_birds_attraction_description(attraction)
       else # all other itineraries
         description = attraction.css('p').text
       end
@@ -68,7 +68,7 @@ class BalboaParkItineraryIdeas::Scraper
   end
 
   # Handles that the Explorer itinerary summary has a href with jpeg in its summary
-  def self.get_explorer_summary(itinerary_page)
+  def get_explorer_summary(itinerary_page)
     sum = itinerary_page.css('div.content div.field--type-text-with-summary p')
     node = sum.css('a')[0]
     node.content = "Explorer Pass"
@@ -76,7 +76,7 @@ class BalboaParkItineraryIdeas::Scraper
   end
 
   # Handles that the Birds of Balboa Park itinerary has 3 paragraphs of text
-  def self.get_birds_attraction_description(attraction)
+  def get_birds_attraction_description(attraction)
     description_array = []
     # The California Thrasher has its latin name as <p> instead of <em> like the rest
     if attraction.css('p').text.include?("Toxostoma")

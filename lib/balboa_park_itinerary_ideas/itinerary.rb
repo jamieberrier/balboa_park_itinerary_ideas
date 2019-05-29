@@ -4,9 +4,8 @@ class BalboaParkItineraryIdeas::Itinerary
 
   @@all = []
 
-  def self.new_from_hash(itinerary_hash)
-    itinerary_hash.each {|key, value| self.send(("#{key}="), value)}
-    @@all << self
+  def self.all
+    @@all
   end
 
   def save
@@ -19,12 +18,14 @@ class BalboaParkItineraryIdeas::Itinerary
     self
   end
 
-  def self.all
-    @@all
-  end
-
   # returns the itinerary that matches the user input
   def self.find(id)
     self.all[id-1]
   end
 end
+=begin
+  def self.new_from_hash(itinerary_hash)
+    itinerary_hash.each {|key, value| self.send(("#{key}="), value)}
+    save
+  end
+=end
