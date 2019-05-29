@@ -20,17 +20,17 @@ class BalboaParkItineraryIdeas::Scraper
     self.get_page.css('section#block-views-block-itineraries-block-1 h2').text
   end
 
-  # gets title and url of each itinerary, pushes attributes into array, and returns array
-  def self.scrape_itineraries
-    itineraries = []
+  # gets title and url of each itinerary
+  def scrape_itineraries
+    @doc = Nokogiri::HTML(open(URL))
+    @doc.css('div.view-itineraries span.field-content').each do |x|
 
-    self.get_page.css('div.view-itineraries span.field-content').each do |itinerary|
-      title = itinerary.css('a').text
-      itinerary_url = URL + itinerary.css('a').attribute("href").value
+      itinerary = BalboaParkItineraryIdeas::Itinerary.new
+      itinerary.title = x.css('a').text
+      itinerary.url = URL + x.css('a').attribute("href").value
 
-      itineraries.push(title: title, itinerary_url: itinerary_url)
+      itinerary.save
     end
-    itineraries
   end
 
   # gets the itinerary's attrubutes of summary and attractions (name, description & URL) from itinerary's page and returns hash with the attributes

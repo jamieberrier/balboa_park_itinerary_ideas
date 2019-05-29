@@ -1,19 +1,16 @@
 class BalboaParkItineraryIdeas::Itinerary
 
-  attr_accessor :title, :itinerary_url, :summary, :attractions # an array of hashes with names, descriptions, and URLs of the attractions
+  attr_accessor :title, :url, :summary, :attractions # an array of hashes with names, descriptions, and URLs of the attractions
 
   @@all = []
 
-  def initialize(itinerary_hash)
+  def self.new_from_hash(itinerary_hash)
     itinerary_hash.each {|key, value| self.send(("#{key}="), value)}
     @@all << self
   end
 
-  # creates itinerary instances from an array of scraped itineraries
-  def self.create_from_collection(itineraries_array)
-    itineraries_array.each do |itinerary|
-      BalboaParkItineraryIdeas::Itinerary.new(itinerary)
-    end
+  def save
+    @@all << self
   end
 
   # add the itinerary's summary and details of its attractions from a hash of scraped attributes

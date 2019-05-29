@@ -2,16 +2,10 @@
 class BalboaParkItineraryIdeas::CLI
 
   def call
-    make_itineraries
+    BalboaParkItineraryIdeas::Scraper.new.scrape_itineraries
     welcome_message
     list_itineraries
     menu
-  end
-
-  # makes instances of Itinerary using an array of itineraries scraped from URL
-  def make_itineraries
-    itineraries_array = BalboaParkItineraryIdeas::Scraper.scrape_itineraries
-    BalboaParkItineraryIdeas::Itinerary.create_from_collection(itineraries_array)
   end
 
   # displays welome message scrape from balboapark.org
@@ -60,7 +54,7 @@ class BalboaParkItineraryIdeas::CLI
 
   # scrapes and adds the itinerary's attributes from the individual itinerary's page
   def add_attributes(itinerary)
-    attributes = BalboaParkItineraryIdeas::Scraper.scrape_itinerary_page(itinerary.itinerary_url)
+    attributes = BalboaParkItineraryIdeas::Scraper.scrape_itinerary_page(itinerary.url)
     itinerary.add_itinerary_attributes(attributes)
   end
 
@@ -78,7 +72,7 @@ class BalboaParkItineraryIdeas::CLI
     end
 
     puts "\nClick below for more information about the ".red + "#{itinerary.title} Itinerary:".red.bold
-    puts "#{itinerary.itinerary_url}\n".green.underline
+    puts "#{itinerary.url}\n".green.underline
   end
 
   # displays exit message to the user
