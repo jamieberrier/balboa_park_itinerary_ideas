@@ -44,7 +44,7 @@ class BalboaParkItineraryIdeas::Scraper
   end
 
   def get_attractions(itinerary)
-    @itinerary_page.css('div.field--name-field-stops div.field--item').collect do |attraction|
+    @itinerary_page.css('div.field--name-field-stops div.field--item').each do |attraction|
       # attraction name
       name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
       name.strip! unless name == nil
@@ -60,7 +60,7 @@ class BalboaParkItineraryIdeas::Scraper
       end
       # pushes hash of attraction details on to attractions array
       itinerary.attractions.push(name: name, description: description, attraction_url: attraction_url)
-    end # end of collect
+    end # end of each
   end
 
   # Handles that the Explorer itinerary summary has a href with jpeg in its summary
