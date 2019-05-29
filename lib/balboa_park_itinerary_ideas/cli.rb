@@ -4,23 +4,30 @@ class BalboaParkItineraryIdeas::CLI
   def call
     @s = BalboaParkItineraryIdeas::Scraper.new
     @s.scrape_itineraries
+    @welcome_header = @s.scrape_welcome_header
+    @welcome_message = @s.scrape_welcome_message
+    @header = @s.scrape_header
+    start
+  end
+
+  def start
     welcome_message
     list_itineraries
     menu
   end
 
-  # displays welome message scrape from balboapark.org
+  # displays scraped welome header and message
   def welcome_message
     @border = "------------------------------------------------------------------------------"
     puts @border
-    puts "#{@s.scrape_welcome_header}".blue.bold
-    puts Strings.wrap(@s.scrape_welcome_message, 80)
+    puts "#{@welcome_header}".blue.bold
+    puts Strings.wrap(@welcome_message, 80)
     puts @border
   end
 
   # lists the itineraries for the user to choose from
   def list_itineraries
-    puts "\n#{@s.scrape_header}".blue.bold
+    puts "\n#{@header}".blue.bold
     BalboaParkItineraryIdeas::Itinerary.all.each.with_index(1) do |itinerary, i|
       puts "#{i}.".red.bold + " #{itinerary.title}".bold
     end
@@ -53,13 +60,13 @@ class BalboaParkItineraryIdeas::CLI
     end
   end
 
-  # scrapes and adds the itinerary's attributes from the individual itinerary's page
+  # scrapes and adds the itinerary's summary and attractions from the individual itinerary's page
   def add_attributes(itinerary)
     attributes = @s.scrape_itinerary_page(itinerary.url)
     itinerary.add_itinerary_attributes(attributes)
   end
 
-  # displays the itinerary's details: title, summary along with each attraction's name, description, and URL (if has one)
+  # displays the itinerary's details: title, summary, and each attraction's name, description, and URL (if has one)
   def print_details(itinerary)
     puts "\n#{itinerary.title}".blue.bold
     puts Strings.wrap(itinerary.summary, 86).yellow

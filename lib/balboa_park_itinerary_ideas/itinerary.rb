@@ -12,10 +12,9 @@ class BalboaParkItineraryIdeas::Itinerary
     @@all << self
   end
 
-  # add the itinerary's summary and details of its attractions from a hash of scraped attributes
+  # add the itinerary's summary and details of its attractions from hash of scraped attributes
   def add_itinerary_attributes(itinerary_hash)
     itinerary_hash.each {|key, value| self.send(("#{key}="), value)}
-    self
   end
 
   # returns the itinerary that matches the user input
@@ -23,9 +22,3 @@ class BalboaParkItineraryIdeas::Itinerary
     self.all[id-1]
   end
 end
-=begin
-  def self.new_from_hash(itinerary_hash)
-    itinerary_hash.each {|key, value| self.send(("#{key}="), value)}
-    save
-  end
-=end

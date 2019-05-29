@@ -1,7 +1,7 @@
 class BalboaParkItineraryIdeas::Scraper
   URL = "https://www.balboapark.org"
 
-  # gets title and url of each itinerary
+  # creates instances of Itinerary with title and url for each itinerary
   def scrape_itineraries
     @doc = Nokogiri::HTML(open(URL))
     @doc.css('div.view-itineraries span.field-content').each do |x|
@@ -13,11 +13,11 @@ class BalboaParkItineraryIdeas::Scraper
       itinerary.save
     end
   end
-
+=begin
   def self.get_page
     Nokogiri::HTML(open(URL))
   end
-
+=end
   # gets welcome header
   def scrape_welcome_header
     @doc.css('section#block-welcome h2').text
@@ -69,10 +69,10 @@ class BalboaParkItineraryIdeas::Scraper
 
   # Handles that the Explorer itinerary summary has a href with jpeg in its summary
   def get_explorer_summary(itinerary_page)
-    sum = itinerary_page.css('div.content div.field--type-text-with-summary p')
-    node = sum.css('a')[0]
+    summary = itinerary_page.css('div.content div.field--type-text-with-summary p')
+    node = summary.css('a')[0]
     node.content = "Explorer Pass"
-    sum.text.strip
+    summary.text.strip
   end
 
   # Handles that the Birds of Balboa Park itinerary has 3 paragraphs of text
