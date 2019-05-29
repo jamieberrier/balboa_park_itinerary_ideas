@@ -16,33 +16,35 @@ class BalboaParkItineraryIdeas::Scraper
     end
   end
 
-  # gets welcome header
-  def scrape_welcome_header
+  def scrape_welcome_header # gets welcome header
     @doc.css('section#block-welcome h2').text
   end
 
-  # gets welome message
-  def scrape_welcome_message
+  def scrape_welcome_message # gets welome message
     @doc.css('section#block-welcome p').text
   end
 
-  # gets 'Itinerary Ideas' header
-  def scrape_header
+  def scrape_header # gets 'Itinerary Ideas' header
     @doc.css('section#block-views-block-itineraries-block-1 h2').text
   end
 
-  # gets the itinerary's summary and attractions (name, description & URL) from the itinerary's page, adds to itinerary instance, and returns itinerary instance
+  # gets itinerary summary and attractions (name, description & URL) from itinerary page and adds to itinerary
   def scrape_itinerary_page(itinerary)
     #itinerary_page = Nokogiri::HTML(open(itinerary_url, ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE)) # use if security certificate is expired
-    itinerary_page = Nokogiri::HTML(open(itinerary.url))
+    @itinerary_page = Nokogiri::HTML(open(itinerary.url))
     # Summary
     if itinerary.title.include?("Explorer") # Explorer itinerary summary has a href with jpeg in the summary
-      itinerary.summary = get_explorer_summary(itinerary_page)
+      itinerary.summary = get_explorer_summary
     else
-      itinerary.summary = itinerary_page.css('div.content div.field--type-text-with-summary p').text.strip
+      itinerary.summary = @itinerary_page.css('div.content div.field--type-text-with-summary p').text.strip
     end
     # Attractions
-    itinerary_page.css('div.field--name-field-stops div.field--item').collect do |attraction|
+    get_attractions(itinerary)
+    itinerary.attractions.reject! { |e|  e[:name] == nil } # reject duplicates
+  end
+
+  def get_attractions(itinerary)
+    @itinerary_page.css('div.field--name-field-stops div.field--item').collect do |attraction|
       # attraction name
       name = attraction.css('div.content').text.delete("\n").strip.split("Attraction").join.strip.split("Description").delete_at(0)
       name.strip! unless name == nil
@@ -58,14 +60,12 @@ class BalboaParkItineraryIdeas::Scraper
       end
       # pushes hash of attraction details on to attractions array
       itinerary.attractions.push(name: name, description: description, attraction_url: attraction_url)
-      itinerary.attractions.reject! { |e|  e[:name] == nil } # reject duplicates
     end # end of collect
-    itinerary
   end
 
   # Handles that the Explorer itinerary summary has a href with jpeg in its summary
-  def get_explorer_summary(itinerary_page)
-    summary = itinerary_page.css('div.content div.field--type-text-with-summary p')
+  def get_explorer_summary
+    summary = @itinerary_page.css('div.content div.field--type-text-with-summary p')
     node = summary.css('a')[0]
     node.content = "Explorer Pass"
     summary.text.strip

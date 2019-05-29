@@ -7,6 +7,7 @@ class BalboaParkItineraryIdeas::CLI
     @welcome_header = @s.scrape_welcome_header
     @welcome_message = @s.scrape_welcome_message
     @header = @s.scrape_header
+
     start
   end
 
@@ -19,6 +20,7 @@ class BalboaParkItineraryIdeas::CLI
   # displays scraped welome header and message
   def welcome_message
     @border = "------------------------------------------------------------------------------"
+
     puts @border
     puts "#{@welcome_header}".blue.bold
     puts Strings.wrap(@welcome_message, 80)
@@ -28,6 +30,7 @@ class BalboaParkItineraryIdeas::CLI
   # lists the itineraries for the user to choose from
   def list_itineraries
     puts "\n#{@header}".blue.bold
+
     BalboaParkItineraryIdeas::Itinerary.all.each.with_index(1) do |itinerary, i|
       puts "#{i}.".red.bold + " #{itinerary.title}".bold
     end
@@ -36,6 +39,7 @@ class BalboaParkItineraryIdeas::CLI
   # displays the user's choices, gets the user's input, and either displays details of an itinerary, the list of itineraries, or exits
   def menu
     input = nil
+    
     while input != "exit"
       puts @border
       puts "What would you like to do? Your choices are:".green.bold
