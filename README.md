@@ -19,17 +19,20 @@ Type:
   ```
 
 And then paste, or type:
-  $ git clone git@github.com:jamieberrier/balboa_park_itinerary_ideas.git
+
+    $ git clone git@github.com:jamieberrier/balboa_park_itinerary_ideas.git
 
 Then type:
-  $ cd balboa_park_itinerary_ideas
+
+    $ cd balboa_park_itinerary_ideas
 
 Finally:
-  $ bundle install
+
+    $ bundle install
 
 ## Usage - GitHub
 
-  $ bin/balboa_park_itinerary_ideas
+    $ bin/balboa_park_itinerary_ideas
 
 And then follow the on screen prompts
 
