@@ -14,7 +14,9 @@ Click:
   clipboard icon ('Clone with SSH')
 
 Type:
+  ```ruby
   $ git clone
+  ```
 
 And then paste, or type:
   $ git clone git@github.com:jamieberrier/balboa_park_itinerary_ideas.git
