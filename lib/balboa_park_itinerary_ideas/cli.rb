@@ -52,7 +52,8 @@ class BalboaParkItineraryIdeas::CLI
 
       if input.to_i.between?(1,9)
         itinerary = BalboaParkItineraryIdeas::Itinerary.find(input.to_i)
-        @s.scrape_itinerary_page(itinerary)
+        # Prevent scraping for the selected itinerary's details if the details were already scraped
+        @s.scrape_itinerary_page(itinerary) unless !itinerary.summary.nil?
         print_details(itinerary)
       elsif input == "list"
         list_itineraries
@@ -72,7 +73,7 @@ class BalboaParkItineraryIdeas::CLI
     itinerary.attractions.each do |attraction|
       puts "\n#{attraction[:name]}".bold.red
       puts Strings.wrap(attraction[:description], 75)
-      
+
       unless attraction[:attraction_url].nil?
         puts "Click for more info: ".green.bold + "#{attraction[:attraction_url]}".green.underline
       end
